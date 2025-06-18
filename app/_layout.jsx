@@ -11,7 +11,9 @@ export default function RootLayout() {
         headerTitleStyle: {
           fontWeight: "bold",
           fontSize: 20,
+          textAlign: "center",
         },
+        headerTitleAlign: "center",
         contentStyle: {
           backgroundColor: "#fff",
           paddingHorizontal: 10,
@@ -20,6 +22,7 @@ export default function RootLayout() {
       }}
     >
       <Stack.Screen name="index" options={{ title: "Home" }} />
+      <Stack.Screen name="notes" options={{ headerTitle: 'Notes' }} />
     </Stack>
   );
 }
