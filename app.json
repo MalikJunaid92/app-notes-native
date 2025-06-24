@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "app-notes-native",
-    "slug": "app-notes-native",
+    "name": "junaid",
+    "slug": "junaid",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -25,9 +25,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      [
-        "expo-router"
-      ],
+      ["expo-router"],
       [
         "expo-splash-screen",
         {
@@ -40,6 +38,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": { 
+      "EXPO_PUBLIC_APPWRITE_PROJECT_ID": "junaid01",
+      "EXPO_PUBLIC_APPWRITE_ENDPOINT": "https://fra.cloud.appwrite.io/v1",
+      "EXPO_PUBLIC_APPWRITE_DB_ID": "junaid01",
+      "EXPO_PUBLIC_APPWRITE_COL_NOTES_ID": "junaid",
+      "EXPO_PUBLIC_APPWRITE_BUNDLE_ID": "junaid-ios",
+      "EXPO_PUBLIC_APPWRITE_PACKAGE_NAME": "junaid-android"
     }
   }
 }

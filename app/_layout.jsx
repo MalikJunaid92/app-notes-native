@@ -11,7 +11,6 @@ export default function RootLayout() {
         headerTitleStyle: {
           fontWeight: "bold",
           fontSize: 20,
-          textAlign: "center",
         },
         headerTitleAlign: "center",
         contentStyle: {
