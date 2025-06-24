@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -9,9 +10,12 @@ import {
 } from "react-native";
 import AddNoteModal from "../../components/AddNoteModal";
 import NoteList from "../../components/NoteList";
+import { useAuth } from "../../contexts/AuthContext";
 import noteService from "../../services/noteService";
 
 const NoteScreen = () => {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [notes, setNotes] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [newNote, setNewNote] = useState("");
@@ -19,12 +23,20 @@ const NoteScreen = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchNotes();
-  }, []);
+    if (!user && !authLoading) {
+      router.replace("auth");
+    }
+  }, [user, authLoading]);
+
+  useEffect(() => {
+    if (user) {
+      fetchNotes();
+    }
+  }, [user]);
 
   const fetchNotes = async () => {
     setLoading(true);
-    const response = await noteService.getNotes();
+    const response = await noteService.getNotes(user.$id);
     if (response.error) {
       setError(response.error);
       Alert.alert("Error", response.error);
@@ -42,7 +54,7 @@ const NoteScreen = () => {
     if (newNote.trim() === "") {
       return;
     }
-    const response = await noteService.addNote(newNote);
+    const response = await noteService.addNote(user.$id, newNote);
     if (response.error) {
       Alert.alert("Error", response.error);
     } else {
@@ -102,7 +114,13 @@ const NoteScreen = () => {
       ) : (
         <>
           {error && <Text style={styles.errorText}>{error}</Text>}
-          <NoteList notes={notes} onDelete={deleteNote} onEdit={editNote} />
+          {notes.length === 0 ? (
+            <Text style={styles.noNotesText}>
+              No notes available. Add a note!
+            </Text>
+          ) : (
+            <NoteList notes={notes} onDelete={deleteNote} onEdit={editNote} />
+          )}
         </>
       )}
       <TouchableOpacity
