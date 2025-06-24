@@ -1,6 +1,6 @@
 import Constants from "expo-constants";
 import { Platform } from "react-native";
-import { Client, Databases } from "react-native-appwrite";
+import { Account, Client, Databases } from "react-native-appwrite";
 
 const config = {
   endpoint: Constants.expoConfig.extra.EXPO_PUBLIC_APPWRITE_ENDPOINT,
@@ -20,6 +20,6 @@ if (Platform.OS === "android" || Platform.OS === "ios") {
 }
 
 const database = new Databases(client);
-
-export { client, config, database };
+const account = new Account(client);
+export { account, client, config, database };
 

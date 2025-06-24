@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import AddNoteModal from "../../components/AddNoteModal";
 import NoteList from "../../components/NoteList";
 import noteService from "../../services/noteService";
@@ -32,7 +39,7 @@ const NoteScreen = () => {
 
   // Add a new note
   const addNote = async () => {
-    if (newNote.trim() === '') {
+    if (newNote.trim() === "") {
       return;
     }
     const response = await noteService.addNote(newNote);
@@ -44,32 +51,49 @@ const NoteScreen = () => {
     setNewNote("");
     setModalVisible(false);
   };
+  // Edit a note
+  const editNote = async (id, newText) => {
+    if (newText.trim() === "") {
+      Alert.alert("Error", "Note text cannot be empty.");
+      return;
+    }
+    const response = await noteService.updateNote(id, newText);
+    if (response.error) {
+      Alert.alert("Error", response.error);
+    } else {
+      setNotes((prevNotes) =>
+        prevNotes.map((note) =>
+          note.$id === id ? { ...note, text: response.data.text } : note
+        )
+      );
+    }
+  };
   // Delete a note
   const deleteNote = async (noteId) => {
-  Alert.alert(
-    "Delete Note",
-    "Are you sure you want to delete this note?",
-    [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          const response = await noteService.deleteNote(noteId);
-          if (response.error) {
-            Alert.alert("Error", response.error);
-          } else {
-            setNotes(notes.filter(note => note.$id !== noteId));
-          }
+    Alert.alert(
+      "Delete Note",
+      "Are you sure you want to delete this note?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
         },
-      },
-    ],
-    { cancelable: true }
-  ); 
-  }
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            const response = await noteService.deleteNote(noteId);
+            if (response.error) {
+              Alert.alert("Error", response.error);
+            } else {
+              setNotes(notes.filter((note) => note.$id !== noteId));
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -77,10 +101,10 @@ const NoteScreen = () => {
         <ActivityIndicator size="large" color="#007bff" />
       ) : (
         <>
-        {error && <Text style={styles.errorText}>{error}</Text>}
-        <NoteList notes={notes} onDelete={deleteNote} />
+          {error && <Text style={styles.errorText}>{error}</Text>}
+          <NoteList notes={notes} onDelete={deleteNote} onEdit={editNote} />
         </>
-      ) }
+      )}
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => setModalVisible(true)}

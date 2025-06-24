@@ -33,6 +33,16 @@ const noteService = {
     }
     return { data: response };
   },
+  // update note
+  async updateNote(id, text) {
+    const response = await databaseService.updateDocument(dbId, colId, id, {
+      text,
+    });
+    if (response?.error) {
+      return { error: response.error };
+    }
+    return { data: response };
+  },
   // delete note
   async deleteNote(noteId) {
     if (!noteId) {
@@ -48,11 +58,8 @@ const noteService = {
 
 export default noteService;
 
-
-
-
-
-{/*
+{
+  /*
 project name junaid
 project id junaid01
 react native platforn Junaid Android
@@ -62,4 +69,5 @@ const EXPO_PUBLIC_APPWRITE_ENDPOINT = "https://fra.cloud.appwrite.io/v1";
 database name junaid
 database id junaid01
 collection name junaid
-collection id junaid */}
+collection id junaid */
+}
